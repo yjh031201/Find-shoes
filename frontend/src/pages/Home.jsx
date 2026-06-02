@@ -1,4 +1,14 @@
-import { useState, useEffect  } from "react";
+import Model1 from "../assets/images/model1.jpg";
+import Model2 from "../assets/images/model2.jpg";
+import Model3 from "../assets/images/model3.jpg";
+import Model4 from "../assets/images/model4.png";
+import Model5 from "../assets/images/model5.png";
+import Model6 from "../assets/images/model6.png";
+import Model7 from "../assets/images/model7.png";
+import Model8 from "../assets/images/model8.png";
+import Model9 from "../assets/images/model9.png";
+
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/HomePage.css";
 
@@ -50,6 +60,17 @@ export default function HomePage() {
       hideText: true,
     },
   ];
+  const lookbookImages = [
+    Model1,
+    Model2,
+    Model3,
+    Model4,
+    Model5,
+    Model6,
+    Model7,
+    Model8,
+    Model9,
+  ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -64,14 +85,17 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!isPlaying) return;
-    const currentIsVideo = heroSlides[currentSlide]?.video;
-    if (currentIsVideo) return; // 영상 슬라이드면 자동 넘김 중단
 
-    const interval = setInterval(() => {
-      nextSlide();
+    if (heroSlides[currentSlide]?.video) return;
+
+    const timer = setTimeout(() => {
+      setCurrentSlide((prev) =>
+        prev === heroSlides.length - 1 ? 0 : prev + 1,
+      );
     }, 3000);
-    return () => clearInterval(interval);
-  }, [isPlaying, currentSlide]);
+
+    return () => clearTimeout(timer);
+  }, [currentSlide, isPlaying]);
 
   // ───────── 더미 데이터 ─────────
   const brandItems = [
@@ -222,14 +246,19 @@ export default function HomePage() {
                   className={`hero-slide ${index === currentSlide ? "active" : ""}`}
                 >
                   {slide.video ? (
-                    <video
-                      className="hero-image hero-video"
-                      src={slide.video}
-                      autoPlay
-                      muted
-                      playsInline
-                      loop
-                    />
+                    index === currentSlide && (
+                      <video
+                        className="hero-image hero-video"
+                        src={slide.video}
+                        autoPlay
+                        muted
+                        playsInline
+                        preload="auto"
+                        onEnded={() => {
+                          setCurrentSlide(0);
+                        }}
+                      />
+                    )
                   ) : (
                     <img
                       className="hero-image"
@@ -237,7 +266,6 @@ export default function HomePage() {
                       alt={slide.title || "hero slide"}
                     />
                   )}
-
                   <div
                     className={`hero-overlay ${slide.hideText ? "hide-text" : ""}`}
                   >
@@ -274,16 +302,15 @@ export default function HomePage() {
               ›
             </button>
           </section>
-
-          {/* 스타일 신발 섹션 */}
-          <section className="sub-hero-section">
-            <img
-              src="https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?q=80&w=1600&auto=format&fit=crop"
-              alt="추가 배너"
-              className="sub-hero-image"
-            />
+          <section className="lookbook-section">
+            <div className="lookbook-slider">
+              {lookbookImages.map((img, idx) => (
+                <div className="lookbook-item" key={idx}>
+                  <img src={img} alt="" />
+                </div>
+              ))}
+            </div>
           </section>
-
           {/* 슬로건 섹션 */}
           <section className="slogan-section">
             <h2>모든 가격을 넘어, 단 하나의 최선으로</h2>
@@ -292,7 +319,6 @@ export default function HomePage() {
               비교의 수고로움이 사라진 자리에 채워지는 쇼핑의 즐거움
             </p>
           </section>
-
           {/* 프로모션 섹션 */}
           <section className="promo-section">
             <div className="section-title-row">
@@ -311,7 +337,6 @@ export default function HomePage() {
               ))}
             </div>
           </section>
-
           {/* 브랜드 섹션 */}
           <section className="brand-section">
             <div className="section-title-row">
@@ -341,7 +366,6 @@ export default function HomePage() {
               ))}
             </div>
           </section>
-
           {/* 카테고리 섹션 */}
           <section className="category-section">
             <div className="section-title-row">
