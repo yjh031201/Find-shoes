@@ -184,6 +184,8 @@ export default function HomePage() {
     setIsCategoryOpen(true);
     setIsAlarmOpen(false);
   };
+  
+  
 
   return (
     <>
@@ -210,7 +212,7 @@ export default function HomePage() {
           isOpen={isAlarmOpen}
           onClose={() => setIsAlarmOpen(false)}
         />
-        <NavBar />
+        
 
         <main className="main-content">
           {/* ───────── 메인 히어로 슬라이드 ───────── */}
@@ -251,7 +253,8 @@ export default function HomePage() {
                         >
                           {slide.desc}
                         </p>
-                        <button className="hero-cta">최저가 보러가기</button>
+                      
+                        <button className="hero-cta" onClick={() => goSearch("스니커즈")}>최저가 보러가기</button>
                       </>
                     )}
                   </div>
